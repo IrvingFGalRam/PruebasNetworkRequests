@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.TextHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,6 +24,7 @@ import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
 import models.Evento;
+import models.ServerEventListResponse;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -32,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView mTVpId;
     private TextView mTVpTitle;
     private EditText mEtURL;
+
+    private ServerEventListResponse selrListaEventos;
 
     public Evento mEvento;
 
@@ -45,9 +49,28 @@ public class MainActivity extends AppCompatActivity {
         mTVpId = (TextView) findViewById(R.id.tvPostID);
         mTVpTitle = (TextView) findViewById(R.id.tvTitulo);
         mEtURL = (EditText) findViewById(R.id.tvEditURL);
+
+        selrListaEventos = new ServerEventListResponse();
     }
 
     public void onClick(View view){
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.get("http://132.248.108.7/cec/Controladores/listaEventos.php?getLista", new TextHttpResponseHandler() {
+            String resp;
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                throwable.printStackTrace(System.out);
+                resp = "Error " + statusCode;
+                tvHTML.setText(resp);
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                selrListaEventos = ServerEventListResponse.parseJSON(responseString);
+                //selrListaEventos.getEventList();
+            }
+        });
+        /*
         AsyncHttpClient client = new AsyncHttpClient();
         String dominioMod = dominio +mEtURL.getText().toString() + "rest/bug/35?include_fields=summary,status,resolution";
         System.out.println(dominioMod);
@@ -80,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
             public void onRetry(int retryNo) {
                 // called when request is retried
             }
-        });
+        });*/
     }
     //TODO Hacer el modelo de Evento y probar con el dummie
 
