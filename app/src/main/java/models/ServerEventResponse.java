@@ -24,7 +24,4 @@ public class ServerEventResponse {
         return serverEventResponse;
     }
 
-    public List<EventoDeLista> getEventList(){
-        return this.eventList;
-    }
 }

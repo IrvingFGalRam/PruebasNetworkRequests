@@ -25,6 +25,13 @@ public class ServerEventListResponse {
     public static ServerEventListResponse parseJSON(String response) {
         Gson gson = new GsonBuilder().create();
         ServerEventListResponse serverEventListResponse = gson.fromJson(response, ServerEventListResponse.class);
+        /**Podría reducirse a
+         *
+         */
         return serverEventListResponse;
+    }
+
+    public List<EventoDeLista> getEventList(){
+        return this.eventList;
     }
 }

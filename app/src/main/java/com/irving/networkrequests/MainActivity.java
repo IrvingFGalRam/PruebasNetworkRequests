@@ -5,14 +5,12 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.TextHttpResponseHandler;
 
@@ -21,9 +19,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-
 import cz.msebera.android.httpclient.Header;
 import models.Evento;
+import models.EventoDeLista;
 import models.ServerEventListResponse;
 
 
@@ -57,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         AsyncHttpClient client = new AsyncHttpClient();
         client.get("http://132.248.108.7/cec/Controladores/listaEventos.php?getLista", new TextHttpResponseHandler() {
             String resp;
+            EventoDeLista mEventoDL;
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 throwable.printStackTrace(System.out);
@@ -67,7 +66,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 selrListaEventos = ServerEventListResponse.parseJSON(responseString);
-                //selrListaEventos.getEventList();
+                mEventoDL = selrListaEventos.getEventList().get(0);
+                resp = "Nombre: " + mEventoDL.getName() + "\nFecha de inicio: " + mEventoDL.getStartDate();
+                tvHTML.setText(resp);
             }
         });
         /*

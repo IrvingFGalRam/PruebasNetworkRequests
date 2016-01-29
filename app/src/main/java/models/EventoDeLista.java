@@ -10,14 +10,14 @@ import java.util.List;
 
 public class EventoDeLista {
     String name;
-    String title;
+    String startDate;
 
     public String getName(){
         return name;
     }
 
-    public String getTitle(){
-        return title;
+    public String getStartDate(){
+        return startDate;
     }
 
     /*
