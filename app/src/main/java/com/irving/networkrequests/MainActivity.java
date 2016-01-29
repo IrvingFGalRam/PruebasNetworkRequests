@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 selrListaEventos = ServerEventListResponse.parseJSON(responseString);
                 mEventoDL = selrListaEventos.getEventList().get(0);
-                resp = "Nombre: " + mEventoDL.getName() + "\nFecha de inicio: " + mEventoDL.getStartDate();
+                resp = "Nombre:eweg " + mEventoDL.getName() + "\nFecha de inicio: " + mEventoDL.getStartDate();
                 tvHTML.setText(resp);
             }
         });
