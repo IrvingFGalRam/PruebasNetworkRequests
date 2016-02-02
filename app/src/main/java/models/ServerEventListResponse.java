@@ -9,8 +9,7 @@ import java.util.List;
 
 
 public class ServerEventListResponse {
-    /**
-     * el Json manda { "events": [ ...]} pero por tenerlo claro llamo a la lista de eventos eventList
+    /**el Json manda { "events": [ ...]} pero por tenerlo claro llamo a la lista de eventos eventList
      * haciendo el @SerializedName("events") 'iguala' eventList->events
      */
     @SerializedName("events")
@@ -25,9 +24,8 @@ public class ServerEventListResponse {
     public static ServerEventListResponse parseJSON(String response) {
         Gson gson = new GsonBuilder().create();
         ServerEventListResponse serverEventListResponse = gson.fromJson(response, ServerEventListResponse.class);
-        /**Podría reducirse a:
-         * return gson.fromJson(response, ServerEventListResponse.class);
-         */
+        /**Lo pongo así para tenerlo más claro, sin embargo podría reducirse a:
+         * return gson.fromJson(response, ServerEventListResponse.class);*/
         return serverEventListResponse;
     }
 

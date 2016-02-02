@@ -100,11 +100,23 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ObtenerMsjHTML"
+        android:text="ListaEvento"
         android:textAllCaps="false"
-        android:id="@+id/button2"
+        android:id="@+id/bListaEvento"
         android:onClick="onClick"
         android:layout_below="@+id/tvShow"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignRight="@+id/tvTitulo"
+        android:layout_alignEnd="@+id/tvTitulo" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Evento"
+        android:textAllCaps="false"
+        android:id="@+id/bEvento"
+        android:onClick="onClick"
+        android:layout_alignTop="@+id/bListaEvento"
+        android:layout_toRightOf="@+id/bListaEvento"
+        android:layout_toEndOf="@+id/bListaEvento" />
 
 </RelativeLayout>

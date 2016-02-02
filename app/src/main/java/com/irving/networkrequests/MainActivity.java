@@ -21,8 +21,10 @@ import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
 import models.Evento;
+import models.Evento.*;
 import models.EventoDeLista;
 import models.ServerEventListResponse;
+import models.ServerEventResponse;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText mEtURL;
 
     private ServerEventListResponse selrListaEventos;
+    private ServerEventResponse serEvent;
 
     public Evento mEvento;
 
@@ -49,62 +52,59 @@ public class MainActivity extends AppCompatActivity {
         mEtURL = (EditText) findViewById(R.id.tvEditURL);
 
         selrListaEventos = new ServerEventListResponse();
+        serEvent = new ServerEventResponse();
     }
 
     public void onClick(View view){
         AsyncHttpClient client = new AsyncHttpClient();
-        client.get("http://132.248.108.7/cec/Controladores/listaEventos.php?getLista", new TextHttpResponseHandler() {
-            String resp;
-            EventoDeLista mEventoDL;
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                throwable.printStackTrace(System.out);
-                resp = "Error " + statusCode;
-                tvHTML.setText(resp);
-            }
+        String link;
+        switch(view.getId()) {
+            case R.id.bListaEvento:
+                link = "http://132.248.108.7/cec/Controladores/listaEventos.php?getLista=Enero";
+                client.get(link, new TextHttpResponseHandler() {
+                    String resp;
+                    EventoDeLista respEventoDL;
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                        throwable.printStackTrace(System.out);
+                        resp = "Error " + statusCode;
+                        tvHTML.setText(resp);
+                    }
 
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                selrListaEventos = ServerEventListResponse.parseJSON(responseString);
-                mEventoDL = selrListaEventos.getEventList().get(0);
-                resp = "Nombre:eweg " + mEventoDL.getName() + "\nFecha de inicio: " + mEventoDL.getStartDate();
-                tvHTML.setText(resp);
-            }
-        });
-        /*
-        AsyncHttpClient client = new AsyncHttpClient();
-        String dominioMod = dominio +mEtURL.getText().toString() + "rest/bug/35?include_fields=summary,status,resolution";
-        System.out.println(dominioMod);
-        client.get(dominioMod, new AsyncHttpResponseHandler() {
-            String resp;
-            @Override
-            public void onStart() {
-                // called before request is started
-            }
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        selrListaEventos = ServerEventListResponse.parseJSON(responseString);
+                        respEventoDL = selrListaEventos.getEventList().get(0);
+                        resp = "Nombre:eweg " + respEventoDL.getName() + "\nFecha de inicio: " + respEventoDL.getStartDate();
+                        tvHTML.setText(resp);
+                    }
+                });
+                break;
+            case R.id.bEvento:
+                link = "http://132.248.108.7/cec/Controladores/datosEvento.php?getEvento=123456";
+                client.get(link, new TextHttpResponseHandler() {
+                    String resp;
+                    Evento respEvento;
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                        throwable.printStackTrace(System.out);
+                        resp = "Error " + statusCode;
+                        tvHTML.setText(resp);
+                    }
 
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
-                // called when response HTTP status is "200 OK"}
-                resp = new String(response);
-                resp = "> " + statusCode + "\n" + resp;
-                Log.i(">>> HTML ", resp);
-                System.out.println(resp);
-                tvHTML.setText(resp);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
-                // called when response HTTP status is "4XX" (eg. 401, 403, 404)
-                e.printStackTrace(System.out);
-                resp = "Error " + statusCode;
-                tvHTML.setText(resp);
-            }
-
-            @Override
-            public void onRetry(int retryNo) {
-                // called when request is retried
-            }
-        });*/
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        serEvent = ServerEventResponse.parseJSON(responseString);
+                        respEvento = serEvent.getEvent();
+                        resp = "Nombre: " + respEvento.getName() + "\nID: " + respEvento.getId() +
+                                "\nnum Orgs: " + respEvento.getOrganizerList().size() + "\t num temas: " +
+                                respEvento.getSubjectList().size() + "\n1ra act: " + respEvento.getDayProgramList().
+                                get(0).getActivityList().get(0).getName();
+                        tvHTML.setText(resp);
+                    }
+                });
+                break;
+        }
     }
     //TODO Hacer el modelo de Evento y probar con el dummie
 
